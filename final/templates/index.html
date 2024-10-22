@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>FAQ Search</h1>
+    <input type="text" id="query" placeholder="Ask your question..." style="width: 100%; padding: 10px;">
+    <button id="searchButton" style="padding: 10px; width: 100%;">Search</button>
+    
+    <div id="result">
+        <h2>Result:</h2>
+        <p id="question"></p>
+        <p id="answer"></p>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#searchButton').click(function() {
+                var query = $('#query').val();
+                $.ajax({
+                    url: '/search',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ query: query }),
+                    success: function(data) {
+                        $('#question').text(data.question);
+                        $('#answer').text(data.answer);
+                        $('#result').show();
+                    },
+                    error: function() {
+                        $('#result').hide();
+                        alert("Sorry, no relevant FAQ found.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
